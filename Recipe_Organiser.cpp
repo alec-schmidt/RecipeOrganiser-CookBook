@@ -3,7 +3,6 @@
 #include <fstream>
 #include <string>
 #include <map>
-#include <cpprest/http_client.h>
 
 // ... (Recipe struct, displayMainMenu, viewRecipes, and addRecipe functions) 
 // Define a structure to represent a recipe
@@ -14,32 +13,6 @@ struct Recipe {
     int cookingTime;
     int servingSize;
 };
-
-void suggestRecipesFromInternet(const std::vector<std::string>& userIngredients) {
-    const std::string apiKey = "YOUR_API_KEY"; // Replace with your actual API key
-
-    web::http::client::http_client_config config;
-    config.set_validate_certificates(false); // Ignore SSL certificate validation (for testing purposes)
-
-    web::http::client::http_client client(U("https://api.spoonacular.com"), config);
-    
-    // Construct the API request URL with user's ingredients
-    const std::string ingredientsParam = boost::algorithm::join(userIngredients, ",");
-    const std::string requestUrl = "/recipes/findByIngredients?ingredients=" + ingredientsParam + "&apiKey=" + apiKey;
-
-    // Send the request and get the response
-    client.request(web::http::methods::GET, web::uri(requestUrl))
-        .then([](web::http::http_response response) {
-            if (response.status_code() == web::http::status_codes::OK) {
-                // Parse the response and display recipe details
-                // You'll need to implement JSON parsing based on the API's response structure
-                // and display the retrieved recipes to the user
-            } else {
-                std::cout << "Error: Unable to retrieve recipes from the internet." << std::endl;
-            }
-        })
-        .wait();
-}
 
 // Function to display the main menu options
 void displayMainMenu() {
@@ -192,7 +165,6 @@ void suggestRecipes(const std::vector<Recipe>& recipes) {
 
 int main() {
     std::vector<Recipe> recipes;
-    std::vector<std::string> userIngredients = getUserIngredients();
 
     const std::string filename = "recipes.txt"; // Change this to your desired filename
 
@@ -219,9 +191,6 @@ int main() {
                 suggestRecipes(recipes); // Added suggestion option
                 break;
             case 5:
-                suggestRecipesFromInternet(userIngredients); // Added internet suggestion option
-                break;
-            case 6:
                 std::cout << "Exiting. Have a delicious day!" << std::endl;
                 return 0;
             default:
