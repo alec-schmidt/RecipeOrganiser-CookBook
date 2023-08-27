@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <limits>
 
 // ... (Recipe struct, displayMainMenu, viewRecipes, and addRecipe functions) 
 // Define a structure to represent a recipe
@@ -19,7 +20,9 @@ void displayMainMenu() {
     std::cout << "Recipe Organizer / Cookbook" << std::endl;
     std::cout << "1. View Recipes" << std::endl;
     std::cout << "2. Add Recipe" << std::endl;
-    std::cout << "3. Exit" << std::endl;
+    std::cout << "3. Save Recipe" << std::endl;
+    std::cout << "4. Suggest Recipe" << std::endl;
+    std::cout << "6. Exit" << std::endl;
     std::cout << "Select an option: ";
 }
 
@@ -79,6 +82,12 @@ void addRecipe(std::vector<Recipe>& recipes) {
         }
         newRecipe.instructions += instruction + "\n";
     }
+
+    std::cout << "Enter cooking time (minutes): ";
+    std::cin >> newRecipe.cookingTime;
+
+    std::cout << "Enter serving size: ";
+    std::cin >> newRecipe.servingSize;
 
     recipes.push_back(newRecipe);
     std::cout << "Recipe added successfully!" << std::endl;
@@ -177,6 +186,11 @@ int main() {
         int choice;
         std::cin >> choice;
 
+        if (choice == 6){
+            std::cout << "Exiting. Have a delicious day!" << std::endl;
+            break;
+        }
+
         switch (choice) {
             case 1:
                 viewRecipes(recipes);
@@ -190,11 +204,9 @@ int main() {
             case 4:
                 suggestRecipes(recipes); // Added suggestion option
                 break;
-            case 5:
-                std::cout << "Exiting. Have a delicious day!" << std::endl;
-                return 0;
             default:
                 std::cout << "Invalid choice. Please select a valid option." << std::endl;
+                break;
         }
     }
 
