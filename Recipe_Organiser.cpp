@@ -9,6 +9,8 @@ struct Recipe {
     std::string name;
     std::vector<std::string> ingredients;
     std::string instructions;
+    int cookingTime;
+    int servingSize;
 };
 
 // Function to display the main menu options
@@ -20,11 +22,33 @@ void displayMainMenu() {
     std::cout << "Select an option: ";
 }
 
-// Function to view existing recipes
+// Function to display recipe details
+void displayRecipeDetails(const Recipe& recipe) {
+    std::cout << "Recipe: " << recipe.name << "\n\n";
+    std::cout << "Ingredients:\n";
+    for (const std::string& ingredient : recipe.ingredients) {
+        std::cout << "- " << ingredient << "\n";
+    }
+    std::cout << "\nInstructions:\n" << recipe.instructions << "\n";
+    std::cout << "\nCooking Time: " << recipe.cookingTime << " minutes\n";
+    std::cout << "Serving Size: " << recipe.servingSize << " servings\n\n";
+    std::cout << "[Press Enter to go back]";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+// Modify the viewRecipes function
 void viewRecipes(const std::vector<Recipe>& recipes) {
     std::cout << "=== Recipes ===" << std::endl;
     for (size_t i = 0; i < recipes.size(); ++i) {
         std::cout << i + 1 << ". " << recipes[i].name << std::endl;
+    }
+    
+    std::cout << "Enter the number of the recipe to view (0 to go back): ";
+    int choice;
+    std::cin >> choice;
+    
+    if (choice >= 1 && choice <= static_cast<int>(recipes.size())) {
+        displayRecipeDetails(recipes[choice - 1]);
     }
 }
 
